@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    {% extends "layout.html" %}
+    {% block content %}
+       <div class="GradeClassifications">
+         <h1>Grade Classifications</h1>
+         <p>This page shows the number of students that scored in each grade classification for the selected module and cohort group</p>
+       </div> <br> <br> <br>
+
+
+       <table id="HTML_Table" style="width: 1000px;">
+
+        <tr>
+          <th>Module</th>
+          <th>First</th>
+          <th>2:1</th>
+          <th>2:2</th>
+          <th>Third</th>
+          <th>Update and Delete</th>
+        </tr>
+        
+
+      </table>
+
+      {% if allow_data_changes %}
+      <button class="insert-button" onclick="insertRow()">Insert</button>
+      {% endif %}
+
+      <!--Students can export the data, personal data of others isn't available-->
+      <button class="export-button" onclick="ExportData()">Export</button>
+
+
+      <script>
+
+        var grade_classification_data = {
+
+          'Internet of Things': ['17', '8', '4', '6'],
+          'Software Development Life Cycle': ['8', '6', '9', '8'],
+          'Negotiated Learning': ['13', '10', '4', '8'],
+          'Information Business Management Processes': ['12', '11', '6', '5'],
+          'Agile Project Management': ['7', '15', '6', '5'],
+          'Cyber Risks in Organisations': ['12', '16', '7', '2'],
+          'Applied Maths II': ['10', '12', '7', '3']
+
+        };
+
+
+        function Load() {
+
+          var table = document.getElementById('HTML_Table');
+
+          // for each row in the table data object, insert them into the HTML table to be displayed
+          for (var module in grade_classification_data) {
+
+            var row = table.insertRow(-1);
+            row.id = module;
+
+            var data = grade_classification_data[module];
+
+            row.insertCell(0).textContent = module;
+            row.insertCell(1).textContent = data[0];
+            row.insertCell(2).textContent = data[1];
+            row.insertCell(3).textContent = data[2];
+            row.insertCell(4).textContent = data[2];
+  
+  
+            // if user has admin rights (admin login) show the delete and update buttons in the table
+            {% if (allow_data_changes) %}
+              row.insertCell(5).innerHTML = '<button onclick="DeleteRecord(\'' + module + '\')">Delete</button><br><button onclick="UpdateRecord(\'' + module + '\')">Update</button>';
+            {% endif %}
+
+          }
+        }
+
+
+
+        function Save() {
+          // save the table data to local storage
+          localStorage.setItem('HTML_Table', JSON.stringify(grade_classification_data));
+        }
+
+
+        function DeleteRecord(id) {
+          // remove the row from the table and data from local storage
+          var record = document.getElementById(id);
+          // removes the table row in front-end
+          record.parentNode.removeChild(record);
+          // removes table row in front-end based on ID
+          delete grade_classification_data[id];
+          Save();
+        }
+
+
+
+
+        function UpdateRecord(id) {
+          // update the row with new data and save to local storage
+          var record = document.getElementById(id);
+
+          // retrieves new updated values from user
+
+          var grade_first = prompt("How many students achieved a First?");
+          var grade_21 = prompt("How many students achieved a 2:1?");
+          var grade_second = prompt("How many students achieved a 2:2?");
+          var grade_third = prompt("How many students achieved a Third?");
+
+
+          // updates the table record data with the new values
+          record.children[1].textContent = grade_first;
+          record.children[2].textContent = grade_21;
+          record.children[3].textContent = grade_second;
+          record.children[4].textContent = grade_third;
+
+          grade_classification_data[id] = [grade_first, grade_21, grade_second, grade_third];
+
+          Save();
+        }
+
+
+
+
+        // create a CSV file of the table data and download it
+        function ExportData() {
+
+          // retrieves and stores the table data
+          var GradeClassificationTable = document.getElementById('HTML_Table');
+          var records = GradeClassificationTable.rows;
+
+          // type of file that will be created when exporting the data
+          var csv = 'data:text/csv;charset=utf-8,';
+
+          // loops through each table row
+          for (var x = 0; x < records.length; x++) {
+          var rowData = [];
+            // loops through every cell in the row
+            for (var y = 0; y < records[x].cells.length - 1; y++) {
+              rowData.push(records[x].cells[y].textContent);
+            }
+
+            csv += rowData.join(',') + '\n';
+          }
+
+          // secures the CSV file with the encodeURI function and adds to browser downloads when export button is clicked
+
+          // creates an 'a' element (html link element)
+          var joinToCSV = document.createElement('a');
+          var secure_CSV = encodeURI(csv);
+
+          joinToCSV.setAttribute('href', secure_CSV);
+          joinToCSV.setAttribute('download', 'Resits.csv');
+
+          document.body.appendChild(joinToCSV);
+          joinToCSV.click();
+
+        }
+
+        Load(); 
+
+
+
+
+
+        // add a new row to the table and save to local storage
+        function insertRow() {
+
+          // save user input from prompt window into variables
+          var module = prompt("What is the Module Name:");
+          var grade_first = prompt("How many students achieved a First?");
+          var grade_21 = prompt("How many students achieved a First??");
+          var grade_second = prompt("How many students achieved a First?");
+          var grade_third = prompt("How many students achieved a First?");
+
+
+          // stores the HTML table element in this variable
+          var table = document.getElementById('HTML_Table');
+
+          // insert row at end of table (-1) is the last position
+          var newRow = table.insertRow(-1);
+
+          // the module name will be the ID to identify the row (similar to primary key in a database)
+          newRow.id = module
+          // assigns the inputted data into the row with the module ID
+          newRow.insertCell(0).textContent = module;
+          newRow.insertCell(1).textContent = grade_first;
+          newRow.insertCell(2).textContent = grade_21;
+          newRow.insertCell(3).textContent = grade_second;
+          newRow.insertCell(4).textContent = grade_third;
+
+          // inserts the update and delete buttons which indentifies the row to action based on the module ID
+          newRow.insertCell(5).innerHTML = '<button onclick="deleteRow(\'' + module + '\')">Delete</button><br><button onclick="UpdateRecord(\'' + module + '\')">Update</button>';
+
+          // creates the new row and inserts the row into the table 
+          grade_classification_data[module] = [grade_first, grade_21, grade_second, grade_third];
+
+          Save();
+        }
+
+
+
+
+
+
+
+      </script>
+
+
+
+
+     {% endblock %}
+  </body>
+</html>

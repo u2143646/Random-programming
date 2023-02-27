@@ -1,0 +1,220 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #444;
+    background-color:#F0FFFF;
+  }
+
+  
+  /*
+   * Formatting the header area
+   */
+  header {
+    background-color: teal;
+    height: 75px;
+    width: 100%;
+    opacity: .9;
+    margin-bottom: 10px;
+  }
+  header h1.logo {
+    margin: 0;
+    font-size: 1.7em;
+    color: #fff;
+    text-transform: uppercase;
+    float: left;
+    position: relative; top: 20px;
+  }
+  header h1.logo:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+  /*
+   * Centering the body content
+   */
+  .container {
+    width: 1200px;
+    margin: 0 auto;
+  }
+  /*
+  div.home {
+    padding: 0px 0 30px 0;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+    text-align: center;
+  }
+  */
+
+#Title {
+  padding: 0px 0 0px 0;
+  text-align: center;
+  position: relative; bottom: 15px;
+}
+
+#welcomeMessage {
+  padding: 0px;
+  text-align: center;
+  position: relative; bottom: 30px;
+}
+
+  div.about {
+    padding: 10px 0 30px 0;
+    background-color: #E6E6FA;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+  }
+  h2 {
+    font-size: 3em;
+    margin-top: 40px;
+    text-align: center;
+    letter-spacing: -2px;
+  }
+  h3 {
+    font-size: 1.7em;
+    font-weight: 100;
+    margin-top: 30px;
+    text-align: center;
+    letter-spacing: -1px;
+    color: #999;
+  }
+  .menu {
+    float: right;
+    margin-top: 8px;
+  }
+  .menu li {
+    display: inline;
+  }
+  .menu li + li {
+    margin-left: 35px;
+  }
+  .menu li a {
+    color: #444;
+    text-decoration: none;
+  }
+
+  #update-button {
+    background-color: lightskyblue;
+    display: table;
+    padding: 0px 0 30px 0;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+    padding: 3px 0 3px 0;
+    font-size: larger;
+    position: relative; left: 1000px; top: 500px; bottom: 15px;
+    
+  }
+
+  #delete-button {
+    background-color: darkseagreen;
+    display: table;
+    padding: 10px 30px;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+    padding: 3px 0 3px 0;
+    font-size: larger;
+    position: relative; left: 1000px; top: 510px; bottom: 15px;
+  }
+
+
+  .filter-options {
+    background-color: lightgray;
+    display: table;
+    padding: 25px;
+    text-align: left;
+    position: relative; left: 650px;
+    padding: 0px 0 30px 0;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 10px;
+  }
+
+  .options {
+    padding: 20px;
+    font-size: larger;
+  }
+
+  .options label {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  #options-heading {
+    padding: 30px;
+    font-size: x-large;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .view-options {
+    position: relative; bottom: 400px; left: 75px;
+    display: table;
+    font-size: x-large;
+  }
+
+  .view-options div {
+    background-color: #D0F0C0;
+    padding: 10px;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 10px;
+  }
+
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: whitesmoke;
+  }
+
+  td{
+    border: 2px solid darkgrey;
+    text-align: left;
+    padding: 8px;
+  }
+
+  th {
+    background-color: lightskyblue;
+    border: 2px solid dimgray;
+    text-align: left;
+    padding: 8px;
+  }
+
+  #insert-button {
+    text-align: center;
+  }
+
+  .username {
+    position: absolute; bottom: 20px; left: 10px;
+    font-weight: bold;
+  }
+
+  .insert-button {
+    background-color: lightblue;
+    display: table;
+    padding: 3px 3px;
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+    padding: 3px 30px 3px 30px;
+    font-size: x-large;
+    position: absolute; bottom: 80px; right: 50px;
+    cursor: pointer;
+  }
+
+  .export-button {
+    background-color: darkseagreen;
+    display: table;
+    padding: 3px 3px;
+    -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+            border-radius: 6px;
+    padding: 3px 25px 3px 25px;
+    font-size: x-large;
+    position: absolute; bottom: 30px; right: 50px;
+    cursor: pointer;
+  }

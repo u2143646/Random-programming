@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+  <body>
+    {% extends "layout.html" %}
+    {% block content %}
+      <div class="home">
+        <h1 id="Title">Module Completion Statistics View</h1>
+        <p id="welcomeMessage">Welcome to the home page of the Module Completion Statistics SI View!</p>
+      </div>
+      <strong><div id="update-button">
+        Click here to update data
+      </div>
+      </strong>
+      <strong><div id="delete-button">
+        Click here to delete data
+      </div></strong>
+
+      <div class="filter-options">
+
+        <div id="options-heading">
+          Select one of the below options to filter the data <br> for each View
+        </div>
+
+        <div class="options">
+          <label for="Year Group">Filter by Year Group (Cohort)</label>
+          <select name="Year Group" id="Year Group">
+            <option value="2019-2020">2019-2020</option>
+            <option value="2020-2021">2020-2021</option>
+            <option value="2021-2022">2021-2022</option>
+            <option value="2022-2023">2022-2023</option>
+          </select> 
+
+          <br><br><br>
+
+          <label for="Module">Filter by Module</label>
+          <select name="Module" id="Module">
+            <option value="Internet of Things">Internet of Things</option>
+            <option value="Software Development Life Cycle">Software Development Life Cycle</option>
+            <option value="Cyber Risks in Organisations">Cyber Risks in Organisations</option>
+            <option value="Information Business Management Processes">Information Business Management Processes</option>
+          </select> 
+
+          <br><br><br>
+          
+          <label for="Cohort Average">Filter by Cohort Average</label>
+          <select name="Cohort Average" id="Cohort Average">
+            <option value="Highest Average">Highest Average</option>
+            <option value="Lowest Average">Lowest Average</option>
+          </select> 
+
+        </div>  
+
+      </div>
+
+      <div class="SI View-options">
+
+        <div class="view-options">
+          <div><a href="{{ url_for('extensionRequests') }}">Extension Requests</a></div><br><br><br>
+          <div><a href="{{ url_for('ModulePassRate') }}">Module Pass Rate</a></div><br><br><br>
+          <div><a href="{{ url_for('Resits') }}">Re-sits</a></div><br><br><br>
+          <div><a href="{{ url_for('GradeClassifications') }}">Grade Classifications</a></div>
+        </div>  
+
+      </div>
+
+
+    {% endblock %}
+
+
+
+    
+
+
+
+  </body>
+</html>
