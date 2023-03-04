@@ -32,7 +32,11 @@
         </form>
     </div>
 
-
+    {% if incorrect_login %}
+    <script>
+          alert("Invalid Login! Either username or password is incorrect. Please try again.")
+    </script>
+    {% endif %}
 
     <style>
     body {

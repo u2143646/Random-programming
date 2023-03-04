@@ -23,16 +23,16 @@
 
 
       {% if allow_data_changes %}
-      <button class="insert-button" onclick="insertRow()">Insert</button>
+      <button class="insert-button" onclick="Add_new_record()">Insert</button>
       {% endif %}
 
       <!--Students can export the data, personal data of others isn't available-->
-      <button class="export-button" onclick="ExportData()">Export</button>
+      <button class="export-button" onclick="Export_table_data()">Export</button>
 
       <script>
 
 
-        var module_pass_rate_data = {
+        let module_pass_rate_data = {
 
           'Internet of Things': ['35', '5', '40'],
           'Software Development Life Cycle': ['31', '9', '40'],
@@ -45,160 +45,225 @@
         };
 
 
-        function Load() {
 
-          var table = document.getElementById('HTML_Table');
+        
+        // add a new row to the table and save to local storage
+        function Add_new_record() {
+          
+          // stores the HTML table element in this variable
+          let page_table = document.getElementById('HTML_Table');
+          // insert row at end of HMTL table, (-1) is the last position
+          let added_row = page_table.insertRow(-1);
+
+          
+          // save user input from prompt window into variables
+          const name_of_module = prompt("What is the Module Name:");
+
+          // the module name will be the ID to identify the row (similar to primary key in a database)
+          added_row.id = name_of_module
+
+          const students_passed = prompt("How many students passed the module?");
+
+          const students_failed = prompt("How many students failed the module?");
+
+          const total_num_of_students = prompt("How many students sat the module in total?");
+
+          
+          // creates the new row by appending the inputs into an array
+          let data_to_insert = []
+          data_to_insert.push(students_passed, students_failed, total_num_of_students)
+
+
+          // assigns the inputted data into the HTML table row with the module ID
+          added_row.insertCell(0).textContent = name_of_module;
+
+          added_row.insertCell(1).textContent = students_passed;
+
+          added_row.insertCell(2).textContent = students_failed;
+
+          added_row.insertCell(3).textContent = total_num_of_students;
+
+          
+          
+          // inserts the row into the data object
+          module_pass_rate_data[name_of_module] = data_to_insert;
+
+          // inserts the update and delete buttons into the cell's HTML which indentifies the row to action based on the module ID
+          // in-built javascript 'deleteRow' onclick event deletes the specified row from the table
+          added_row.insertCell(4).innerHTML = '<button onclick="deleteRow(\'' + name_of_module + '\')">Delete</button><br><button onclick="Update_table_record(\'' + name_of_module + '\')">Update</button>';
+          
+          // save the table data to browser's local storage
+          localStorage.setItem('HTML_Table', JSON.stringify(module_pass_rate_data));
+        }
+
+
+        
+
+        // update the row with new data and save to browser's local storage
+        function Update_table_record(ID) {
+          
+          // updates the table record data with the new values in the HTML
+          module_pass_rate_data[ID] = []
+          
+          let table_record = document.getElementById(ID);
+          
+          // retrieves new updated values from user
+          const students_passed = prompt("How many students passed the module?");
+
+          const students_failed = prompt("How many students failed the module?");
+
+          const total_num_of_students = prompt("What was the total number of students sitting the module");
+          
+          // updates the data object with the new row data consisting of user inputs
+          module_pass_rate_data[ID] = [students_passed, students_failed, total_num_of_students];
+          
+          // updates the table record data with the new values in the browser
+          // child elements of the ID (the ID will be the name of the module)
+          table_record.children[1].textContent = students_passed;
+
+          table_record.children[2].textContent = students_failed;
+
+          table_record.children[3].textContent = total_num_of_students;
+
+          
+
+          // save the table data to browser's local storage
+          localStorage.setItem('HTML_Table', JSON.stringify(module_pass_rate_data));
+        }
+
+
+
+
+        // function adds the data from the above JavaScript object and inserts into HTML table to be shown on page
+        function Display_table_data() {
+
+          let data_table = document.getElementById('HTML_Table');
 
           // for each row in the table data object, insert them into the HTML table to be displayed
-          for (var module in module_pass_rate_data) {
-
-            var row = table.insertRow(-1);
-            row.id = module;
-
-            var data = module_pass_rate_data[module];
-
-            row.insertCell(0).textContent = module;
-            row.insertCell(1).textContent = data[0];
-            row.insertCell(2).textContent = data[1];
-            row.insertCell(3).textContent = data[2];
+          for (let module_name in module_pass_rate_data) {
+            // stores record/row based on module name attribute in object
+            let record_data = module_pass_rate_data[module_name];
+            // creates a new row at the bottom of the table
+            let table_record = data_table.insertRow(-1);           
             
+
+            // in built insertCell function to add data into HTML table row
+
+            table_record.insertCell(0).textContent = module_name;
+
+            table_record.insertCell(1).textContent = record_data[0];
+
+            table_record.insertCell(2).textContent = record_data[1];
+
+            table_record.insertCell(3).textContent = record_data[2];
+
+          
+
+
+            // stores the name of the module as the row identifier (similar to a primary key in a database table)
+            table_record.id = module_name;
             
             // if user has admin rights (admin login) show the delete and update buttons in the table
+            // Jinja 2 syntax to allow python variable results dictate the appearance of buttons
             {% if (allow_data_changes) %}
-              row.insertCell(4).innerHTML = '<button onclick="DeleteRecord(\'' + module + '\')">Delete</button><br><button onclick="UpdateRecord(\'' + module + '\')">Update</button>';
+              // modifies the HTML of the cell data with update and delete buttons
+              table_record.insertCell(4).innerHTML = '<button onclick="Remove_table_record(\'' + module_name + '\')">Delete</button><br><button onclick="Update_table_record(\'' + module_name + '\')">Update</button>';
             {% endif %}
           
           }
         }
 
 
-
-        function Save() {
-        // save the table data to local storage
-          localStorage.setItem('HTML_Table', JSON.stringify(module_pass_rate_data));
-        }
-
-
-        function DeleteRecord(id) {
-          // remove the row from the table and data from local storage
-          var record = document.getElementById(id);
-          // removes the table row in front-end
-          record.parentNode.removeChild(record);
-          // removes table row in front-end based on ID
-          delete module_pass_rate_data[id];
-          Save();
-        }
-
-
-
-
-      function UpdateRecord(id) {
-        // update the row with new data and save to local storage
-        var record = document.getElementById(id);
-
-        // retrieves new updated values from user
-
-        var students_passed = prompt("How many students passed the module?");
-        var students_failed = prompt("How many students failed the module?");
-        var total_num_of_students = prompt("How many students failed the module?");
-
-
-        // updates the table record data with the new values
-        record.children[1].textContent = students_passed;
-        record.children[2].textContent = students_failed;
-        record.children[3].textContent = total_num_of_students;
-
-        module_pass_rate_data[id] = [students_passed, students_failed, total_num_of_students];
-
-        Save();
-      }
-
-
-
-
       // create a CSV file of the table data and download it
-      function ExportData() {
-
-          // retrieves and stores the table data
-        var ModulePassRateTable = document.getElementById('HTML_Table');
-        var records = ModulePassRateTable.rows;
-
+      function Export_table_data() {
+        
         // type of file that will be created when exporting the data
-        var csv = 'data:text/csv;charset=utf-8,';
+        let convert_csv = 'data:text/csv;charset=utf-8,';
+
+        const name_of_csv_file = 'ModulePassRate.csv'
+
+        // retrieves and stores the table element and the all the rows
+        const ModulePassRateTable = document.getElementById('HTML_Table');
+        let table_records = ModulePassRateTable.rows;
+
+        // declares but doesn't define
+        let record_data = [];
 
         // loops through each table row
-        for (var x = 0; x < records.length; x++) {
-          var rowData = [];
-          // loops through every cell in the row
-          for (var y = 0; y < records[x].cells.length - 1; y++) {
-            rowData.push(records[x].cells[y].textContent);
+        for (let x = 0; x < table_records.length; x++) {
+
+          record_data = [];
+          // loops through every cell in the row 
+          for (let y = 0; y < table_records[x].cells.length - 1; y++) {
+            // adds to record_data array
+            record_data.push(table_records[x].cells[y].textContent);
           }
-
-          csv += rowData.join(',') + '\n';
+          // joins each row, seperates rows at ',' and adds the new row on the next line
+          convert_csv += record_data.join(',') + '\n';
         }
+        
+        // creates an 'a' element (html link element)
+        let joinToCSV = document.createElement('a');
+        // secures the CSV file with the encodeURI function 
+        let secure_CSV = encodeURI(convert_csv);
 
-          // secures the CSV file with the encodeURI function and adds to browser downloads when export button is clicked
-
-          // creates an 'a' element (html link element)
-        var joinToCSV = document.createElement('a');
-        var secure_CSV = encodeURI(csv);
-
+        // the link will encode the data and download a csv file
         joinToCSV.setAttribute('href', secure_CSV);
-        joinToCSV.setAttribute('download', 'Resits.csv');
 
-        document.body.appendChild(joinToCSV);
+        joinToCSV.setAttribute('download', name_of_csv_file);
         joinToCSV.click();
 
+        // add the csv link to the HTML body and above code when the link is clicked
+        
       }
 
-      Load(); 
+  
 
 
+      function Remove_table_record(ID) {
 
+        // remove the row from the table and data from local storage
+        let table_record = document.getElementById(ID);
+        // data of the table record is removed and set to an empty row (appears as deleted)
+        module_pass_rate_data[ID] = null;
 
+        // removes the table row in browser storage
+        table_record.remove(table_record);
 
-        // add a new row to the table and save to local storage
-      function insertRow() {
-
-        // save user input from prompt window into variables
-        var name_of_module = prompt("What is the Module Name:");
-        var students_passed = prompt("How many students passed the module?");
-        var students_failed = prompt("How many students failed the module?");
-        var total_num_of_students = prompt("How many students failed the module?");
-
-
-        // stores the HTML table element in this variable
-        var table = document.getElementById('HTML_Table');
-
-        // insert row at end of table (-1) is the last position
-        var new_row = table.insertRow(-1);
-
-        // the module name will be the ID to identify the row (similar to primary key in a database)
-        newRow.id = name_of_module 
-        // assigns the inputted data into the row with the module ID
-        new_row.insertCell(0).textContent = name_of_module;
-        new_row.insertCell(1).textContent = students_passed;
-        new_row.insertCell(2).textContent = students_failed;
-        new_row.insertCell(3).textContent = total_num_of_students;
-
-        // inserts the update and delete buttons which indentifies the row to action based on the module ID
-        new_row.insertCell(4).innerHTML = '<button onclick="deleteRow(\'' + name_of_module + '\')">Delete</button><br><button onclick="UpdateRecord(\'' + name_of_module + '\')">Update</button>';
-
-        // creates the new row and inserts the row into the table 
-        module_pass_rate_data[name_of_module] = [students_passed, students_failed, total_num_of_students];
-
-        Save();
+        // save the table data to browser's local storage
+        localStorage.setItem('HTML_Table', JSON.stringify(module_pass_rate_data));
       }
 
-
+      Display_table_data(); 
 
 
 
       </script>
 
 
-
-
      {% endblock %}
+
+
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

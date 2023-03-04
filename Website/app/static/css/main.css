@@ -94,30 +94,7 @@ body {
     text-decoration: none;
   }
 
-  #update-button {
-    background-color: lightskyblue;
-    display: table;
-    padding: 0px 0 30px 0;
-    -webkit-border-radius: 6px;
-       -moz-border-radius: 6px;
-            border-radius: 6px;
-    padding: 3px 0 3px 0;
-    font-size: larger;
-    position: relative; left: 1000px; top: 500px; bottom: 15px;
-    
-  }
-
-  #delete-button {
-    background-color: darkseagreen;
-    display: table;
-    padding: 10px 30px;
-    -webkit-border-radius: 6px;
-       -moz-border-radius: 6px;
-            border-radius: 6px;
-    padding: 3px 0 3px 0;
-    font-size: larger;
-    position: relative; left: 1000px; top: 510px; bottom: 15px;
-  }
+  
 
 
   .filter-options {
@@ -218,3 +195,5 @@ body {
     position: absolute; bottom: 30px; right: 50px;
     cursor: pointer;
   }
+
+  
