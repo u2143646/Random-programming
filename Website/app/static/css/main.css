@@ -130,6 +130,7 @@ body {
     position: relative; bottom: 400px; left: 75px;
     display: table;
     font-size: x-large;
+    padding: 50px;
   }
 
   .view-options div {
